@@ -126,7 +126,7 @@ int main()
     // Load accounts from file at startup
     loadAccountsFromFile(head, filename);
 
-    cout << "Welcome to CBE Mobile Banking System!" << endl;
+    cout << "Welcome to Mobile Banking Management System!" << endl;
 
     while (true) {
         cout << "\nMenu" << endl;
