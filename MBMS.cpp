@@ -14,7 +14,6 @@ struct AccountNode {
     string account_id;
     int  account_number;
     double balance;
-    vector<string> transaction_history;
     AccountNode *next;
 
     AccountNode(string fullName, string phone, string id, int accNumber, double initialBalance)
