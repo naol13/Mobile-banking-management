@@ -36,7 +36,43 @@ void loadAccountsFromFile(AccountNode *&head, const string &filename);
 
 // Stub function definitions to avoid linker errors
 void createAccount(AccountNode *&head) {
-    cout << "createAccount function called." << endl;
+    string fullName, phone, id;
+    int accNumber;
+    double initialBalance;
+
+    cout << "Enter account holder full name: ";
+    cin.ignore();
+    getline(cin, fullName);
+
+    cout << "Enter phone number: ";
+    getline(cin, phone);
+
+    cout << "Enter account ID: ";
+    getline(cin, id);
+
+    cout << "Enter the account number: ";
+    cin >> accNumber;
+
+    cout << "Enter initial balance: ";
+    cin >> initialBalance;
+     AccountNode *current = head;
+    while (current != nullptr) {
+        if (current->account_number == accNumber) {
+            cout << "Error: Account number already exists. Please use a different account number." << endl;
+            return;
+        }
+        current = current->next;
+    }
+
+    if (initialBalance < 0) {
+        cout << "Error: Initial balance cannot be negative." << endl;
+        return;
+    }
+
+    AccountNode *newAccount = new AccountNode(fullName, phone, id, accNumber, initialBalance);
+    newAccount->next = head;
+    head = newAccount;
+    cout << "Account created successfully!" << endl;
 }
 
 void searchAccount(AccountNode *head) {
@@ -121,7 +157,7 @@ int main()
     int choice;
     bool isLoggedIn = false;
     int currentAccNumber = -1;
-    string filename = "accounts.txt";
+    string filename = "accounts.csv";
 
     // Load accounts from file at startup
     loadAccountsFromFile(head, filename);
@@ -193,3 +229,5 @@ int main()
         
     return 0;
 }
+
+//createAccount function definition
