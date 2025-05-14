@@ -33,7 +33,7 @@ void displayAllAccounts(AccountNode *head);
 void saveAccountsToFile(AccountNode *head, const string &filename);
 void loadAccountsFromFile(AccountNode *&head, const string &filename);
 
-// Stub function definitions to avoid linker errors
+
 void createAccount(AccountNode *&head) {
     string fullName, phone, id;
     int accNumber;
@@ -85,9 +85,27 @@ void depositMoney(AccountNode *head) {
 void withdrawMoney(AccountNode *head) {
     cout << "withdrawMoney function called." << endl;
 }
-
+// log in function definetion
 bool login(AccountNode *head, int* currentAccNumber) {
-    cout << "login function called." << endl;
+
+      int accNumber;
+
+    cout << "Enter your account number: ";
+    cin >> accNumber;
+
+    
+    AccountNode *current = head;
+    while (current != nullptr) {
+        if (current->account_number == accNumber) {
+            cout << "Login successful!" << endl;
+            cout << "Welcome, " << current->account_holder_full_name << "!" << endl;
+            cout << "Your current balance is: Birr " << current->balance << endl;
+            *currentAccNumber = accNumber;
+            return true;
+        }
+        current = current->next;
+    }
+    cout << "Invalid account number. Please try again." << endl;
     return false;
 }
 
