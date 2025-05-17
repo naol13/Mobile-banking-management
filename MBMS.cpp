@@ -109,8 +109,37 @@ bool login(AccountNode *head, int* currentAccNumber) {
     return false;
 }
 
-void editAccount(AccountNode *head) {
-    cout << "editAccount function called." << endl;
+void editAccount(AccountNode *head) {string id;
+    cout << "Enter your account ID to search: ";
+    cin >> id;
+
+    AccountNode *current = head;
+    while (current != nullptr) {
+        if (current->account_id == id) {
+            cout << "Editing account for: " << current->account_holder_full_name << endl;
+            cout << "Current Phone Number: " << current->phone_number << endl;
+            cout <<"Enter new phone number (or press enter to keep current): ";
+            string newPhone;
+            cin.ignore(); // clear the newline from the input buffer
+            getline(cin, newPhone);
+            if (!newPhone.empty()) {
+                current->phone_number = newPhone;
+            }
+
+            cout << "Current Full Name: " << current->account_holder_full_name << endl;
+            cout << "Enter new full name (or press enter to keep current): ";
+            string newFullName;
+            getline(cin, newFullName);
+            if (!newFullName.empty()) {
+                current->account_holder_full_name = newFullName;
+            }
+
+            cout << "Account updated successfully!" << endl;
+            return;
+        }
+        current = current->next;
+    }
+    cout << "Account not found." << endl;
 }
 
 void deleteAccount(AccountNode *&head) {
