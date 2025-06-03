@@ -412,6 +412,104 @@ void depositMoney(AccountNode* head, const string& filename, const string& curre
 // Function to withdraw money from an account
 
 void withdrawMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
+    if (head == nullptr) {
+        cout << "No accounts available. Please create an account first." << endl;
+        return;
+    }
+
+    if (currentAccountID.empty()) {
+        cout << "No account is currently logged in. Please log in first." << endl;
+        return;
+    }
+
+    AccountNode* account = findAccountByID(head, currentAccountID);
+    if (!account) {
+        cout << "Logged in account ID not found." << endl;
+        return;
+    }
+
+    cout << "Account found: " << account->account_holder_full_name << endl;
+
+    // Check account-specific withdrawal restrictions
+    if (account->account_type == "Children's account" && account->age < 18) {
+        cout << "Withdrawal not allowed: Account holder must be at least 18 years old for Children's account." << endl;
+        return;
+    }
+
+    double amount;
+    cout << "Enter amount to withdraw: ";
+    cin >> amount;
+    cin.clear(); // Clear any error flags
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+
+    if (amount <= 0) {
+        cout << "Invalid amount. Withdrawal amount must be positive." << endl;
+        return;
+    }
+
+    // Check minimum balance requirements based on account type
+    double minBalance = 0.0;
+    if (account->account_type == "Saving account") {
+        minBalance = 50.0;
+    } else if (account->account_type == "Education account") {
+        minBalance = 10.0;
+    } else if (account->account_type == "Women's account") {
+        minBalance = 25.0;
+    } else if (account->account_type == "Children's account") {
+        minBalance = 10.0;
+    } else if (account->account_type == "Closed account") {
+        minBalance = 200.0;
+    } else if (account->account_type == "Without interest account") {
+        minBalance = 50.0;
+    }
+
+    // Check if withdrawal would bring balance below minimum
+    if (account->balance - amount < minBalance) {
+        cout << "Withdrawal not allowed: Minimum balance of " << minBalance << " Birr required for "
+             << account->account_type << "." << endl;
+        return;
+    }
+
+    // Check if withdrawal amount exceeds available balance
+    if (amount > account->balance) {
+        cout << "Insufficient balance. Withdrawal failed." << endl;
+        return;
+    }
+
+    // Note: Monthly interest is now only applied through the admin menu option
+    // and not automatically during withdrawals
+
+    // Calculate service charge based on account type
+    double serviceCharge = 0.0;
+    if (account->account_type == "Saving account") {
+        serviceCharge = amount * 0.005; // 0.5% service charge for savings accounts
+    } else if (account->account_type == "Education account") {
+        serviceCharge = amount * 0.002; // 0.2% service charge for education accounts
+    } else if (account->account_type == "Women's account") {
+        serviceCharge = amount * 0.003; // 0.3% service charge for women's accounts
+    } else if (account->account_type == "Closed account") {
+        serviceCharge = amount * 0.01; // 1% service charge for closed accounts
+    } else if (account->account_type == "Without interest account") {
+        serviceCharge = amount * 0.008; // 0.8% service charge for without interest accounts
+    }
+
+    // Apply withdrawal
+    account->balance -= amount;
+    string timestamp = getCurrentTimestamp();
+    account->transactions.push_back(Transaction("Withdrawal", -amount, timestamp));
+
+    // Apply service charge if applicable
+    if (serviceCharge > 0) {
+        applyServiceCharge(head, account, serviceCharge, "Withdrawal Fee");
+        cout << "Service charge of Birr " << fixed << setprecision(2) << serviceCharge
+             << " applied to your account." << endl;
+    }
+
+    // Save changes immediately
+    saveAccountsToFile(head, filename);
+
+    cout << "Withdrawal successful! New balance: Birr " << fixed << setprecision(2) << account->balance << endl;
+
 
 }
 
