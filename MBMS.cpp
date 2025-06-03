@@ -605,6 +605,34 @@ void editAccount(AccountNode* head) {
 // Function to delete an account
 
 void deleteAccount(AccountNode*& head) {
+     if (head == nullptr) {
+        cout << "No accounts available to delete." << endl;
+        return;
+    }
+
+    string accountID;
+    cout << "Enter the account ID to delete: ";
+    cin >> accountID;
+
+    AccountNode* current = head;
+    AccountNode* previous = nullptr;
+
+    while (current != nullptr) {
+        if (current->account_id == accountID) {
+            if (previous == nullptr) {
+                head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            delete current;
+            cout << "Account deleted successfully!" << endl;
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+    cout << "Error: Account ID not found." << endl;
+
 
 }
 
