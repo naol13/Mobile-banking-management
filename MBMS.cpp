@@ -708,7 +708,32 @@ AccountNode* getOrCreateServiceAccount(AccountNode*& head);
 extern string bankServiceAccountID;
 
 // Forward declaration of applyServiceCharge function
-void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAmount, const string& chargeReason);
+void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAmount, const string& chargeReason){
+    if (chargeAmount <= 0) {
+        return; // No charge to apply
+    }
+
+    // Find the service account
+    AccountNode* serviceAccount = findAccountByID(head, bankServiceAccountID);
+    if (!serviceAccount) {
+        serviceAccount = getOrCreateServiceAccount(head);
+    }
+
+    // Deduct from customer account
+    account->balance -= chargeAmount;
+    string timestamp = getCurrentTimestamp();
+    account->transactions.push_back(Transaction("Service Charge: " + chargeReason, -chargeAmount, timestamp));
+
+    // Add to service account
+    serviceAccount->balance += chargeAmount;
+    string description = "Service Charge from Account " + account->account_id + ": " + chargeReason;
+    Transaction serviceTransaction(description, chargeAmount, timestamp, true); // true indicates it's a service charge
+    serviceAccount->transactions.push_back(serviceTransaction);
+
+    cout << "Service charge of Birr " << fixed << setprecision(2) << chargeAmount
+         << " applied for " << chargeReason << endl;
+
+}
 
 // Function to get current timestamp or find the bank service account
 AccountNode* getOrCreateServiceAccount(AccountNode*& head) {
