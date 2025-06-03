@@ -402,6 +402,9 @@ bool login(AccountNode* head, string* currentAccountID) {
 
 }
 
+// Forward declaration for saveAccountsToFile
+void saveAccountsToFile(AccountNode* head, const string& filename);
+
 // Function to deposit money into an account
 
 void depositMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
