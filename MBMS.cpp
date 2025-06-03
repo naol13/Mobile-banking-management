@@ -503,6 +503,44 @@ void loadAccountsFromFile(AccountNode*& head, const string& filename) {
 }
 // Function to save accounts to a file
 void saveAccountsToFile(AccountNode* head, const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error opening file for saving accounts: " << filename << endl;
+        return;
+    }
+
+    int accountCount = 0;
+    AccountNode* current = head;
+
+    // Print absolute path for debugging
+    char absolutePath[_MAX_PATH];
+    if (_fullpath(absolutePath, filename.c_str(), _MAX_PATH) != NULL) {
+        cout << "Saving accounts to: " << absolutePath << endl;
+    }
+
+    while (current != nullptr) {
+        file << current->account_holder_full_name << ","
+             << current->phone_number << ","
+             << current->account_id << ","
+             << current->account_type << ","
+             << current->sex << ","
+             << current->status << ","
+             << current->age << ","
+             << current->balance << "\n";
+
+        if (file.fail()) {
+            cout << "Error writing account to file. Last account ID: " << current->account_id << endl;
+            file.close();
+            return;
+        }
+
+        accountCount++;
+        current = current->next;
+    }
+
+    file.close();
+    cout << accountCount << " accounts saved successfully to " << filename << endl;
+
 
 }
 
