@@ -721,6 +721,86 @@ void viewTransactions(AccountNode* head) {
 // Function to transfer money between accounts
 void transferMoney(AccountNode* head, const string& filename) {
 
+    if (head == nullptr) {
+        cout << "No accounts available. Please create an account first." << endl;
+        return;
+    }
+
+    string sourceID, destID;
+    double amount;
+
+    cout << "Enter source account ID: ";
+    cin >> sourceID;
+    cout << "Enter destination account ID: ";
+    cin >> destID;
+
+    if (sourceID == destID) {
+        cout << "Error: Source and destination account IDs cannot be the same." << endl;
+        return;
+    }
+
+    AccountNode* sourceAccount = findAccountByID(head, sourceID);
+    if (!sourceAccount) {
+        cout << "Source account ID not found." << endl;
+        return;
+    }
+
+    if (sourceAccount->account_type == "Children's account" && sourceAccount->age < 18) {
+        cout << "Transfer not allowed: Account holder must be at least 18 years old for Children's account." << endl;
+        return;
+    }
+
+    AccountNode* destAccount = findAccountByID(head, destID);
+    if (!destAccount) {
+        cout << "Destination account ID not found." << endl;
+        return;
+    }
+
+    cout << "Enter amount to transfer: ";
+    cin >> amount;
+    if (amount <= 0) {
+        cout << "Invalid amount. Transfer amount must be positive." << endl;
+        return;
+    }
+
+    if (sourceAccount->balance < 50) {
+        cout << "Transfer not allowed: Minimum balance of 50 Birr required in source account." << endl;
+        return;
+    }
+
+    double todayTotal = getTodayTransferOutTotal(sourceAccount);
+    if (todayTotal + amount > 600000) {
+        cout << "Transfer not allowed: Daily transfer limit of 600000 Birr exceeded." << endl;
+        return;
+    }
+
+    if (amount > sourceAccount->balance) {
+        cout << "Insufficient balance in source account. Transfer failed." << endl;
+        return;
+    }
+
+    // Calculate transfer fee
+    double transferFee = amount * 0.002; // 0.2% transfer fee
+
+    // Perform the transfer
+    sourceAccount->balance -= amount;
+    destAccount->balance += amount;
+
+    // Apply transfer fee as a service charge
+    applyServiceCharge(head, sourceAccount, transferFee, "Transfer Fee");
+
+    string timestamp = getCurrentTimestamp();
+    sourceAccount->transactions.push_back(Transaction("Transfer Out", amount, timestamp));
+    destAccount->transactions.push_back(Transaction("Transfer In", amount, timestamp));
+
+    // Save changes immediately
+    saveAccountsToFile(head, filename);
+
+cout << "Transfer successful! "<<endl;
+
+ cout<<"    source account : " << fixed << setprecision(2) << sourceAccount->account_holder_full_name<< "Trsnsferd ->"<<amount <<endl;
+    cout << "New balance of destination account :  " << fixed << setprecision(2) << destAccount->account_holder_full_name<< " Recived ->"<< endl; 
+
 }
 
 // Forward declarations
