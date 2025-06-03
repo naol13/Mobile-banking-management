@@ -537,6 +537,30 @@ void displayAllAccounts(AccountNode* head, bool isAdmin) {
 
 // Function to view transactions for an account
 void viewTransactions(AccountNode* head) {
+    if (head == nullptr) {
+        cout << "No accounts available." << endl;
+        return;
+    }
+
+    string accountID;
+    cout << "Enter your account ID to view transactions: ";
+    cin >> accountID;
+
+    AccountNode* account = findAccountByID(head, accountID);
+    if (!account) {
+        cout << "Account ID not found." << endl;
+        return;
+    }
+
+    if (account->transactions.empty()) {
+        cout << "No transactions found for this account." << endl;
+        return;
+    }
+
+    cout << "Transaction history for account ID " << accountID << ":" << endl;
+    for (const auto& transaction : account->transactions) {
+        cout << transaction.timestamp << " - " << transaction.type << ": Birr " << fixed << setprecision(2) << transaction.amount << endl;
+    }
 
 }
 
