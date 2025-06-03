@@ -1,12 +1,12 @@
-#include <iostream>// 
-#include <cstdio>
-#include <cstdlib>
-#include <string>
+#include <iostream>// For input/output operations 
+#include <cstdio> // For file operations
+#include <cstdlib> // For system commands
+#include <string> // For string operations
 #include <iomanip> // For fixed and setprecision
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <ctime>
+#include <sstream> // For stringstream
+#include <fstream> // For file input/output
+#include <vector> // For using vectors
+#include <ctime> // For time operations
 #include <sys/stat.h> // For checking file existence
 #include <limits> // For numeric_limits
 #include <conio.h> // For _getch() to hide password input
@@ -201,6 +201,7 @@ int findHighestAccountID(AccountNode* head) {
     return highestID;
 }
 
+// Function to create a new account
 
 void createAccount(AccountNode*& head, const string& filename) {
     (void)filename; // Mark parameter as unused to suppress warning
@@ -380,6 +381,7 @@ void createAccount(AccountNode*& head, const string& filename) {
 }
 AccountNode* findAccountByID(AccountNode* head, const string& accountID);
 
+// Function to log in to an account
 
 bool login(AccountNode* head, string* currentAccountID) {
     string inputID;
@@ -400,46 +402,50 @@ bool login(AccountNode* head, string* currentAccountID) {
 
 }
 
+// Function to deposit money into an account
+
 void depositMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
 
 
 }
 
+// Function to withdraw money from an account
 
 void withdrawMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
 
-
 }
 
-
+// Function to search for an account by ID or name
 void searchAccount(AccountNode* head) {
 }
+
+// Function to edit account details
 
 void editAccount(AccountNode* head) {
 
 }
 
-void deleteAccount(AccountNode*& head) {
+// Function to delete an account
 
+void deleteAccount(AccountNode*& head) {
 
 }
 
+// Function to display all accounts
 void displayAllAccounts(AccountNode* head, bool isAdmin) {
 
 
 }
 
-
+// Function to view transactions for an account
 void viewTransactions(AccountNode* head) {
 
 }
 
+// Function to transfer money between accounts
 void transferMoney(AccountNode* head, const string& filename) {
 
-
 }
-
-
 
 // Forward declarations
 AccountNode* findAccountByID(AccountNode* head, const string& accountID);
@@ -456,11 +462,12 @@ AccountNode* getOrCreateServiceAccount(AccountNode*& head) {
 
 }
 
+// Function to load accounts from a file
 void loadAccountsFromFile(AccountNode*& head, const string& filename) {
 
 
 }
-
+// Function to save accounts to a file
 void saveAccountsToFile(AccountNode* head, const string& filename) {
 
 }
