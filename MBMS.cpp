@@ -1051,10 +1051,7 @@ void applyMonthlyInterest(AccountNode* head) {
 }
 
 
-// Apply service charge and record it to the service account
-void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAmount, const string& chargeReason) {
 
-}
 
 
 
