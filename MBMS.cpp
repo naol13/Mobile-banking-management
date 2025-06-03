@@ -709,7 +709,7 @@ extern string bankServiceAccountID;
 
 // Forward declaration of applyServiceCharge function
 void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAmount, const string& chargeReason){
-    if (chargeAmount <= 0) {
+ if (chargeAmount <= 0) {
         return; // No charge to apply
     }
 
