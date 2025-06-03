@@ -1048,13 +1048,74 @@ AccountNode* findAccountByID(AccountNode* head, const string& accountID) {
 
 void applyMonthlyInterest(AccountNode* head) {
 
+time_t now = time(0);
+    AccountNode* current = head;
+    int accountsUpdated = 0;
+    double totalInterestApplied = 0.0;
+
+    cout << "\n===== Applying Monthly Interest =====" << endl;
+
+    while (current != nullptr) {
+        // Skip accounts that don't earn interest and bank service account
+        if (current->account_type != "Without interest account" &&
+            current->account_id != bankServiceAccountID) {
+
+            // Calculate days passed since last interest application
+            double daysPassed = difftime(now, current->last_interest_time) / (24 * 60 * 60);
+            if (daysPassed >= 30) { // Apply interest if at least 30 days have passed
+                double monthlyInterestRate = 0.0;
+
+                // Set interest rate based on account type
+                if (current->account_type == "Saving account") {
+                    monthlyInterestRate = 0.03; // 3% for Saving account
+                } else if (current->account_type == "Women's account") {
+                    monthlyInterestRate = 0.037; // 3.7% for Women's account
+                } else if (current->account_type == "Children's account") {
+                    monthlyInterestRate = 0.035; // 3.5% for Children's account
+                } else if (current->account_type == "Closed account") {
+                    monthlyInterestRate = 0.025; // 2.5% for Closed account
+                } else if (current->account_type == "Education account") {
+                    monthlyInterestRate = 0.032; // 3.2% for Education account
+                }
+
+                if (monthlyInterestRate > 0) {
+                    double oldBalance = current->balance;
+                    double interest = current->balance * monthlyInterestRate;
+
+                    current->balance += interest;
+
+                    if (interest > 0) {
+                        string timestamp = getCurrentTimestamp();
+                        current->transactions.push_back(Transaction("Monthly Interest", interest, timestamp));
+
+                        cout << "Applied " << fixed << setprecision(2) << (monthlyInterestRate * 100)
+                             << "% interest to " << current->account_holder_full_name
+                             << "'s " << current->account_type << " (ID: " << current->account_id << ")" << endl;
+                        cout << "  Old balance: Birr " << oldBalance
+                             << ", Interest: Birr " << interest
+                             << ", New balance: Birr " << current->balance << endl;
+
+                        accountsUpdated++;
+                        totalInterestApplied += interest;
+                    }
+
+                    // Update last interest time
+                    current->last_interest_time = now;
+                }
+            }
+        }
+        current = current->next;
+    }
+
+    cout << "\nInterest applied to " << accountsUpdated << " accounts." << endl;
+    cout << "Total interest paid: Birr " << fixed << setprecision(2) << totalInterestApplied << endl;
+    cout << "====================================\n" << endl;
+
+
+
+
+
 }
-
-
-
-
-
-
 
 
 // Function to pause the screen and wait for user input
