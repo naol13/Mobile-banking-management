@@ -422,6 +422,40 @@ void searchAccount(AccountNode* head) {
 // Function to edit account details
 
 void editAccount(AccountNode* head) {
+    if (head == nullptr) {
+        cout << "No accounts available to edit." << endl;
+        return;
+    }
+
+    string accountID;
+    cout << "Enter the account ID to edit: ";
+    cin >> accountID;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    AccountNode* account = findAccountByID(head, accountID);
+    if (!account) {
+        cout << "Account ID not found." << endl;
+        return;
+    }
+
+    cout << "Editing account: " << account->account_holder_full_name << endl;
+
+    cout << "Enter new full name (leave blank to keep current): ";
+    string newName;
+    getline(cin, newName);
+    if (!newName.empty()) {
+        account->account_holder_full_name = newName;
+    }
+
+    cout << "Enter new phone number (leave blank to keep current): ";
+    string newPhone;
+    getline(cin, newPhone);
+    if (!newPhone.empty()) {
+        account->phone_number = newPhone;
+    }
+
+    cout << "Account updated successfully." << endl;
+
 
 }
 
