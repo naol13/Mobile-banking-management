@@ -656,6 +656,34 @@ void editAccount(AccountNode* head) {
 // Function to delete an account
 
 void deleteAccount(AccountNode*& head) {
+     if (head == nullptr) {
+        cout << "No accounts available to delete." << endl;
+        return;
+    }
+
+    string accountID;
+    cout << "Enter the account ID to delete: ";
+    cin >> accountID;
+
+    AccountNode* current = head;
+    AccountNode* previous = nullptr;
+
+    while (current != nullptr) {
+        if (current->account_id == accountID) {
+            if (previous == nullptr) {
+                head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            delete current;
+            cout << "Account deleted successfully!" << endl;
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+    cout << "Error: Account ID not found." << endl;
+
 
 }
 
@@ -1014,6 +1042,18 @@ void pauseScreen() {
 bool isSameDay(const string& timestamp1, const string& timestamp2) {
     // Compare only the date part (YYYY-MM-DD)
     return timestamp1.substr(0, 10) == timestamp2.substr(0, 10);
+}
+
+double getTodayTransferOutTotal(AccountNode* account) {
+    double total = 0.0;
+    string today = getCurrentTimestamp().substr(0, 10);
+    for (const auto& t : account->transactions) {
+        if (t.type == "Transfer Out" && isSameDay(t.timestamp, today)) {
+            total += t.amount;
+        }
+    }
+    return total;
+
 }
 
 double getTodayTransferOutTotal(AccountNode* account) {
