@@ -1084,9 +1084,7 @@ double getTodayTransferOutTotal(AccountNode* account) {
 
 }
 
-double getTodayTransferOutTotal(AccountNode* account) {
 
-}
 
 // Function to view service charges collected
 void viewServiceCharges(AccountNode* head) {
