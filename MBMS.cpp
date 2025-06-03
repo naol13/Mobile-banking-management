@@ -378,9 +378,25 @@ void createAccount(AccountNode*& head, const string& filename) {
     cout << "Account created successfully! Your account ID is: " << id << endl;
 
 }
+AccountNode* findAccountByID(AccountNode* head, const string& accountID);
 
 
 bool login(AccountNode* head, string* currentAccountID) {
+    string inputID;
+    cout << "Enter your account ID: ";
+    cin >> inputID;
+
+    AccountNode* account = findAccountByID(head, inputID);
+    if (account) {
+        cout << "Login successful!" << endl;
+        cout << "Welcome, " << account->account_holder_full_name << "!" << endl;
+        cout << "Current balance: ********" << endl;
+        *currentAccountID = inputID;
+        return true;
+    } else {
+        cout << "Invalid account ID. Please try again." << endl;
+        return false;
+    } 
 
 }
 
