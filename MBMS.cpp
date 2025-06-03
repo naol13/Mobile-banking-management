@@ -560,7 +560,58 @@ void withdrawMoney(AccountNode* head, const string& filename, const string& curr
 
 // Function to search for an account by ID or name
 void searchAccount(AccountNode* head) {
+    if (head == nullptr) {
+        cout << "No accounts available to search." << endl;
+        return;
+    }
+
+    cout << "Search by: 1. Account ID  2. Account Holder Name" << endl;
+    cout << "Enter choice: ";
+    int choice;
+    cin >> choice;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    if (choice == 1) {
+        string accountID;
+        cout << "Enter account ID to search: ";
+        getline(cin, accountID);
+
+        AccountNode* account = findAccountByID(head, accountID);
+        if (account) {
+            cout << "Account found:" << endl;
+            cout << "Full Name: " << account->account_holder_full_name << endl;
+            cout << "Phone Number: " << account->phone_number << endl;
+            cout << "Account ID: " << account->account_id << endl;
+            cout << "Balance: ********" << endl;
+        } else {
+            cout << "Account ID not found." << endl;
+        }
+    } else if (choice == 2) {
+        string name;
+        cout << "Enter account holder full name to search: ";
+        getline(cin, name);
+
+        AccountNode* current = head;
+        bool found = false;
+        while (current != nullptr) {
+            if (current->account_holder_full_name == name) {
+                cout << "Account found:" << endl;
+                cout << "Full Name: " << current->account_holder_full_name << endl;
+                cout << "Phone Number: " << current->phone_number << endl;
+                cout << "Account ID: " << current->account_id << endl;
+                cout << "Balance: ********" << endl;
+                found = true;
+            }
+            current = current->next;
+        }
+        if (!found) {
+            cout << "No accounts found with the given name." << endl;
+        }
+    } else {
+        cout << "Invalid choice." << endl;
+    }
 }
+
 
 // Function to edit account details
 
