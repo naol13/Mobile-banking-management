@@ -512,7 +512,31 @@ void deleteAccount(AccountNode*& head) {
 
 // Function to display all accounts
 void displayAllAccounts(AccountNode* head, bool isAdmin) {
+if (head == nullptr) {
+        cout << "No accounts to display." << endl;
+        return;
+    }
 
+    cout << "All accounts:" << endl;
+    AccountNode* current = head;
+    while (current != nullptr) {
+        // Skip bank service account if not admin
+        if (!isAdmin && current->account_id == bankServiceAccountID) {
+            current = current->next;
+            continue;
+        }
+        cout << "Full Name: " << current->account_holder_full_name << endl;
+        cout << "Phone Number: " << current->phone_number << endl;
+        cout << "Account ID: " << current->account_id << endl;
+        cout << "Balance: ";
+        if (isAdmin) {
+            cout << "Birr " << fixed << setprecision(2) << current->balance << endl;
+        } else {
+            cout << "********" << endl;
+        }
+        cout << "-------------------------" << endl;
+        current = current->next;
+    }
 
 }
 
