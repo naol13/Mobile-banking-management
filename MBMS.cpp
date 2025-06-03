@@ -642,30 +642,6 @@ AccountNode* findAccountByID(AccountNode* head, const string& accountID) {
     return nullptr;
 }
 
-bool login(AccountNode* head, string* currentAccountID) {
-    string inputID;
-    cout << "Enter your account ID: ";
-    cin >> inputID;
-
-    AccountNode* account = findAccountByID(head, inputID);
-    if (account) {
-        cout << "Login successful!" << endl;
-        cout << "Welcome, " << account->account_holder_full_name << "!" << endl;
-        cout << "Current balance: ********" << endl;
-        *currentAccountID = inputID;
-        return true;
-    } else {
-        cout << "Invalid account ID. Please try again." << endl;
-        return false;
-    }
-
-}
-
-
-
-AccountNode* findAccountByID(AccountNode* head, const string& accountID) {
-
-}
 
 
 void applyMonthlyInterest(AccountNode* head) {
