@@ -914,6 +914,18 @@ bool isSameDay(const string& timestamp1, const string& timestamp2) {
 }
 
 double getTodayTransferOutTotal(AccountNode* account) {
+    double total = 0.0;
+    string today = getCurrentTimestamp().substr(0, 10);
+    for (const auto& t : account->transactions) {
+        if (t.type == "Transfer Out" && isSameDay(t.timestamp, today)) {
+            total += t.amount;
+        }
+    }
+    return total;
+
+}
+
+double getTodayTransferOutTotal(AccountNode* account) {
 
 }
 
