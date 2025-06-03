@@ -470,6 +470,7 @@ void loadAccountsFromFile(AccountNode*& head, const string& filename) {
 // Function to save accounts to a file
 void saveAccountsToFile(AccountNode* head, const string& filename) {
 
+
 }
 
 // New function to save all files (currently only accounts file)
