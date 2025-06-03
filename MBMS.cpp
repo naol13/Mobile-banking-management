@@ -203,6 +203,179 @@ int findHighestAccountID(AccountNode* head) {
 
 
 void createAccount(AccountNode*& head, const string& filename) {
+    (void)filename; // Mark parameter as unused to suppress warning
+     cout << "createAccount called" << endl;
+    string fullName, phone, id, accountType, sex, status;
+    int age;
+    double initialBalance;
+
+    // Load existing accounts from file
+
+
+    cout << "Current lastAccountID before increment: " << lastAccountID << endl;
+    lastAccountID++;  // Increment the ID
+    id = intToString(lastAccountID);
+    cout << "New account ID will be: " << id << endl;
+
+    // Get full name
+    cout << "Enter account holder full name: ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, fullName);
+    while (fullName.empty()) {
+        cout << "Name cannot be empty. Please enter again: ";
+        getline(cin, fullName);
+    }
+    cout << "Full name entered: " << fullName << endl;
+
+    // Get phone number
+    cout << "Enter phone number: ";
+    getline(cin, phone);
+    while (phone.length() != 10 || !all_of(phone.begin(), phone.end(), ::isdigit)) {
+        cout << "Invalid phone number. Please enter a valid 10-digit phone number: ";
+        getline(cin, phone);
+    }
+    cout << "Phone number entered: " << phone << endl;
+
+    // Get status
+    cout << "Enter status (student/servant): ";
+    getline(cin, status);
+    while (status != "student" && status != "servant") {
+        cout << "Invalid status. Please enter either 'student' or 'servant': ";
+        getline(cin, status);
+    }
+    cout << "Status entered: " << status << endl;
+
+    // Get account type
+    cout << "Select account type:" << endl;
+    cout << "1. Saving account" << endl;
+    if (status != "servant") {
+        cout << "2. Education account" << endl;
+    }
+    cout << "3. Women's account" << endl;
+    cout << "4. Children's account" << endl;
+    cout << "5. Closed account" << endl;
+    cout << "6. Without interest account" << endl;
+    cout << "Enter choice: ";
+    int typeChoice;
+    while (!(cin >> typeChoice) || typeChoice < 1 || typeChoice > 6) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid choice. Please enter a valid option: ";
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    // Handle servant restrictions for Education account
+    if (typeChoice == 2 && status == "servant") {
+        cout << "Education accounts are not available for servants." << endl;
+        cout << "Please select a different account type (1, 3-6): ";
+        while (!(cin >> typeChoice) || typeChoice < 1 || typeChoice > 6 || typeChoice == 2) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid choice. Please enter a valid option (1, 3-6): ";
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    switch (typeChoice) {
+        case 1:
+            accountType = "Saving account";
+            break;
+        case 2:
+            accountType = "Education account";
+            break;
+        case 3:
+            accountType = "Women's account";
+            break;
+        case 4:
+            accountType = "Children's account";
+            break;
+        case 5:
+            accountType = "Closed account";
+            break;
+        case 6:
+            accountType = "Without interest account";
+            break;
+    }
+    cout << "Account type selected: " << accountType << endl;
+
+    // Get sex
+    cout << "Enter sex (male/female): ";
+    getline(cin, sex);
+    while (sex != "male" && sex != "female") {
+        cout << "Invalid sex. Please enter either 'male' or 'female': ";
+        getline(cin, sex);
+    }
+    cout << "Sex entered: " << sex << endl;
+
+    // Validate Women's account is only for females
+    if (accountType == "Women's account" && sex != "female") {
+        cout << "Error: Only female users can open a Women's account." << endl;
+        cout << "Please select a different account type." << endl;
+        return;
+    }
+
+    // Get age
+    cout << "Enter age: ";
+    while (!(cin >> age) || age <= 0 || age > 120) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid age. Please enter a valid age (1-120): ";
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "Age entered: " << age << endl;
+
+    // Validate age for Children's account
+    if (accountType == "Children's account" && age >= 18) {
+        cout << "Error: Age must be under 18 for Children's account." << endl;
+        cout << "Please select a different account type for adults." << endl;
+        return;
+    }
+
+    // Validate age for Education account
+    if (accountType == "Education account" && (age < 6 || age > 25)) {
+        cout << "Error: Age must be between 6 and 25 for Education account." << endl;
+        cout << "Please select a different account type." << endl;
+        return;
+    }
+
+    // Get initial balance
+    cout << "Enter initial balance: ";
+    while (!(cin >> initialBalance) || initialBalance < 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid balance. Please enter a non-negative amount: ";
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "Initial balance entered: " << initialBalance << endl;
+
+    // Validate initial balance based on account type
+    if (accountType == "Saving account" && initialBalance < 50) {
+        cout << "Error: Initial balance for Saving account must be at least 50 Birr." << endl;
+        return;
+    } else if (accountType == "Education account" && initialBalance < 10) {
+        cout << "Error: Initial balance for Education account must be at least 10 Birr." << endl;
+        return;
+    } else if (accountType == "Women's account" && initialBalance < 25) {
+        cout << "Error: Initial balance for Women's account must be at least 25 Birr." << endl;
+        return;
+    } else if (accountType == "Children's account" && initialBalance < 25) {
+        cout << "Error: Initial balance for Children's account must be at least 25 Birr." << endl;
+        return;
+    } else if (accountType == "Closed account" && initialBalance < 200) {
+        cout << "Error: Initial balance for Closed account must be at least 200 Birr." << endl;
+        return;
+    } else if (accountType == "Without interest account" && initialBalance < 50) {
+        cout << "Error: Initial balance for Without interest account must be at least 50 Birr." << endl;
+        return;
+    }
+
+    cout << "Initial balance of " << initialBalance << " Birr accepted for " << accountType << "." << endl;
+
+    AccountNode* newAccount = new AccountNode(fullName, phone, id, accountType, sex, status, age, initialBalance);
+    newAccount->next = head;
+    head = newAccount;
+
+    cout << "Account created successfully! Your account ID is: " << id << endl;
 
 }
 
