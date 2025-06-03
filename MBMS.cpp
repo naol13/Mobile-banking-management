@@ -498,6 +498,83 @@ AccountNode* getOrCreateServiceAccount(AccountNode*& head) {
 
 // Function to load accounts from a file
 void loadAccountsFromFile(AccountNode*& head, const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "No existing accounts file found at: " << filename << ". Starting fresh." << endl;
+        return;
+    }
+
+    // Print absolute path for debugging
+    char absolutePath[_MAX_PATH];
+    if (_fullpath(absolutePath, filename.c_str(), _MAX_PATH) != NULL) {
+        cout << "Loading accounts from: " << absolutePath << endl;
+    }
+
+    // Clear existing list
+    while (head != nullptr) {
+        AccountNode* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    string line;
+    int accountCount = 0;
+    AccountNode* tail = nullptr; // To append at the end and maintain order
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string fullName, phone, id, accountType, sex, status, ageStr, balanceStr;
+
+        try {
+            getline(ss, fullName, ',');
+            getline(ss, phone, ',');
+            getline(ss, id, ',');
+            getline(ss, accountType, ',');
+            getline(ss, sex, ',');
+            getline(ss, status, ',');
+            getline(ss, ageStr, ',');
+            getline(ss, balanceStr);
+
+            int age = stoi(ageStr);
+            double balance = stod(balanceStr);
+
+            AccountNode* newAccount = new AccountNode(fullName, phone, id, accountType, sex, status, age, balance);
+            newAccount->next = nullptr;
+
+            // Append to the end to maintain the same order as saved
+            if (head == nullptr) {
+                head = newAccount;
+                tail = newAccount;
+            } else {
+                tail->next = newAccount;
+                tail = newAccount;
+            }
+
+            // Update lastAccountID
+            int currentID = 0;
+            try {
+                currentID = stoi(id);
+            } catch (...) {
+                currentID = 0;
+            }
+            if (currentID > lastAccountID) {
+                lastAccountID = currentID;
+            }
+
+            accountCount++;
+        } catch (const exception& e) {
+            cout << "Error parsing account data: " << e.what() << endl;
+            cout << "Problematic line: " << line << endl;
+            continue;
+        }
+    }
+
+    file.close();
+    cout << accountCount << " accounts loaded successfully from " << filename << endl;
+
+    // Ensure the service account exists
+    getOrCreateServiceAccount(head);
+
 
 
 }
