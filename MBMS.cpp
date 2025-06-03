@@ -457,6 +457,8 @@ if (head == nullptr) {
 
 }
 
+void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAmount, const string& chargeReason);
+
 // Function to withdraw money from an account
 
 void withdrawMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
@@ -748,6 +750,8 @@ void viewTransactions(AccountNode* head) {
     }
 
 }
+
+double getTodayTransferOutTotal(AccountNode* account);
 
 // Function to transfer money between accounts
 void transferMoney(AccountNode* head, const string& filename) {
