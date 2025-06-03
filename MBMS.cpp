@@ -1022,6 +1022,28 @@ double getTodayTransferOutTotal(AccountNode* account) {
 
 // Function to view service charges collected
 void viewServiceCharges(AccountNode* head) {
+    AccountNode* serviceAccount = findAccountByID(head, bankServiceAccountID);
+    if (!serviceAccount) {
+        cout << "Service account not found." << endl;
+        return;
+    }
+
+    cout << "\n===== Bank Service Charges Summary =====" << endl;
+    cout << "Total service charges collected: Birr " << fixed << setprecision(2)
+         << serviceAccount->balance << endl;
+    cout << "\n===== Service Charge Transactions =====" << endl;
+
+    if (serviceAccount->transactions.empty()) {
+        cout << "No service charge transactions found." << endl;
+    } else {
+        for (const auto& transaction : serviceAccount->transactions) {
+            cout << "Date: " << transaction.timestamp << endl;
+            cout << "Type: " << transaction.type << endl;
+            cout << "Description: " << transaction.description << endl;
+            cout << "Amount: Birr " << fixed << setprecision(2) << transaction.amount << endl;
+            cout << "------------------------------" << endl;
+        }
+    }
 
 }
 
