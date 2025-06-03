@@ -685,6 +685,30 @@ void applyServiceCharge(AccountNode* head, AccountNode* account, double chargeAm
 // Function to get current timestamp or find the bank service account
 AccountNode* getOrCreateServiceAccount(AccountNode*& head) {
 
+     AccountNode* serviceAccount = findAccountByID(head, bankServiceAccountID);
+    if (serviceAccount) {
+        return serviceAccount;
+    }
+
+    // Create the service account if it doesn't exist
+    serviceAccount = new AccountNode(
+        "Bank Service Account",
+        "N/A",
+        bankServiceAccountID,
+        "Service",  // Special account type
+        "N/A",
+        "N/A",
+        0,          // Age not applicable
+        0.0         // Initial balance is 0
+    );
+
+    // Add to the beginning of the list
+    serviceAccount->next = head;
+    head = serviceAccount;
+
+    cout << "Bank service account created with ID: " << bankServiceAccountID << endl;
+    return serviceAccount;
+
 }
 
 // Function to load accounts from a file
