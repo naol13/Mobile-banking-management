@@ -405,6 +405,51 @@ bool login(AccountNode* head, string* currentAccountID) {
 // Function to deposit money into an account
 
 void depositMoney(AccountNode* head, const string& filename, const string& currentAccountID) {
+if (head == nullptr) {
+        cout << "No accounts available. Please create an account first." << endl;
+        return;
+    }
+
+    if (currentAccountID.empty()) {
+        cout << "No account is currently logged in. Please log in first." << endl;
+        return;
+    }
+
+    // Debug output
+    cout << "Using logged in account ID: " << currentAccountID << endl;
+
+    AccountNode* account = findAccountByID(head, currentAccountID);
+    if (!account) {
+        cout << "Logged in account ID not found." << endl;
+        return;
+    }
+
+    cout << "Account found: " << account->account_holder_full_name << endl;
+
+    double amount;
+    cout << "Enter amount to deposit: ";
+    cin >> amount;
+    cin.clear(); // Clear any error flags
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+
+    if (amount <= 0) {
+        cout << "Invalid amount. Deposit amount must be positive." << endl;
+        return;
+    }
+
+    // Note: Monthly interest is now only applied through the admin menu option
+    // and not automatically during deposits
+
+    // Perform the deposit
+    account->balance += amount;
+    string timestamp = getCurrentTimestamp();
+    account->transactions.push_back(Transaction("Deposit", amount, timestamp));
+
+    // Save changes immediately
+    saveAccountsToFile(head, filename);
+
+    cout << "Deposit successful! Amount deposited: Birr " << fixed << setprecision(2) << amount << endl;
+    cout << "Current balance: **" << endl;
 
 
 }
